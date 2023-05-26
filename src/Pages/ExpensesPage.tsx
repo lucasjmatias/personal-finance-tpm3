@@ -15,7 +15,9 @@ import { formatMoney, reduceSumProperties } from '../utils/number-utils';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function ExpensesPage() {
-  let { mes: selectedYearMonthParam } = useParams();
+  const navigate = useNavigate();
+  let { currentYearMonth } = useParams();
+
   const [availableMonths, setAvailableMonths] = useState<MonthYear[]>([]);
   const [monthExpenses, setMonthExpenses] = useState<Expense[]>([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -28,12 +30,12 @@ export default function ExpensesPage() {
 
   useEffect(() => {
     (async () => {
-      if (!selectedYearMonthParam) {
+      if (!currentYearMonth) {
         setMonthExpenses([]);
         setTotalExpenses(0);
         return;
       }
-      const monthYear = yearMonthStrToMonthYear(selectedYearMonthParam);
+      const monthYear = yearMonthStrToMonthYear(currentYearMonth);
       const curMonthExpenses = await getExpensesFromMonth(monthYear);
       setMonthExpenses(curMonthExpenses);
       const totalExpenseCalc = curMonthExpenses.reduce(
@@ -42,13 +44,10 @@ export default function ExpensesPage() {
       );
       setTotalExpenses(totalExpenseCalc);
     })();
-  }, [selectedYearMonthParam]);
-  const navigate = useNavigate();
+  }, [currentYearMonth]);
 
-  function handleMonthChange(value: string) {
-    (async () => {
-      navigate(`/expenses/${value}`);
-    })();
+  function handleMonthChange(newMonthYear: string) {
+    navigate(`/expenses/${newMonthYear}`);
   }
   return (
     <PageTemplate>
@@ -63,7 +62,7 @@ export default function ExpensesPage() {
         >
           <MonthYearSelect
             monthYears={availableMonths}
-            value={selectedYearMonthParam}
+            value={currentYearMonth}
             onChange={handleMonthChange}
           ></MonthYearSelect>
           Total expenses: {formatMoney(totalExpenses)}

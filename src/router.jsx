@@ -7,7 +7,7 @@ const router = createBrowserRouter([
     element: <WelcomePage />,
   },
   {
-    path: '/expenses/:mes?',
+    path: '/expenses/:currentYearMonth?',
     element: <ExpensesPage />,
   },
 ]);

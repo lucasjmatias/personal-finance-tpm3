@@ -42,7 +42,7 @@ export default function BasicTable({ expenses = [] }: Props) {
           </TableBody>
         </Table>
       ) : (
-        'Not expenses'
+        'No expenses found'
       )}
     </TableContainer>
   );

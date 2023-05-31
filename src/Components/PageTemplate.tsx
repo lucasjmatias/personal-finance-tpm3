@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import DenseAppBar from '../Components/DenseAppBar';
+import DenseAppBar from './DenseAppBar';
 
 interface Props {
   children?: ReactNode;

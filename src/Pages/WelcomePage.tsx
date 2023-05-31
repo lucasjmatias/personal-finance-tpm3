@@ -2,7 +2,7 @@ import { Button, Paper } from '@mui/material';
 import MonetizationOnRounded from '@mui/icons-material/MonetizationOnRounded';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
-import PageTemplate from '../Components/PageTemplate';
+import PageTemplate from '../components/PageTemplate';
 
 export default function WelcomePage() {
   const navigate = useNavigate();

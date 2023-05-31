@@ -1,18 +1,23 @@
 import { Paper } from '@mui/material';
 import Container from '@mui/material/Container';
-import PageTemplate from '../Components/PageTemplate';
-import { useEffect, useState } from 'react';
+import PageTemplate from '../components/PageTemplate';
+import React, { useEffect, useState } from 'react';
 import {
   getAvailableMonths,
   getExpensesFromMonth,
 } from '../services/ExpensesService';
 import MonthYear from '../integration/entities/MonthYear';
-import MonthYearSelect from '../Components/MonthYearSelect';
-import ExpensesTable from '../Components/ExpensesTable';
+import MonthYearSelect from '../components/MonthYearSelect';
+import ExpensesTable from '../components/ExpensesTable';
 import { yearMonthStrToMonthYear } from '../integration/converters/MonthYearConverters';
 import Expense from '../integration/entities/Expense';
 import { formatMoney, reduceSumProperties } from '../utils/number-utils';
 import { useNavigate, useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 
 export default function ExpensesPage() {
   const navigate = useNavigate();
@@ -46,6 +51,12 @@ export default function ExpensesPage() {
     })();
   }, [currentYearMonth]);
 
+  const [tab, setTab] = useState('1');
+
+  const handleChangeTab = (event: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab);
+  };
+
   function handleMonthChange(newMonthYear: string) {
     navigate(`/expenses/${newMonthYear}`);
   }
@@ -64,9 +75,22 @@ export default function ExpensesPage() {
             monthYears={availableMonths}
             value={currentYearMonth}
             onChange={handleMonthChange}
-          ></MonthYearSelect>
+          />
           Total expenses: {formatMoney(totalExpenses)}
-          <ExpensesTable expenses={monthExpenses} />
+          <Box sx={{ width: '100%' }}>
+            <TabContext value={tab}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <TabList onChange={handleChangeTab} aria-label="Expenses data">
+                  <Tab label="Summary" value="1" />
+                  <Tab label="Complete" value="2" />
+                </TabList>
+              </Box>
+              <TabPanel value="1">Summary</TabPanel>
+              <TabPanel value="2">
+                <ExpensesTable expenses={monthExpenses} />
+              </TabPanel>
+            </TabContext>
+          </Box>
         </Paper>
       </Container>
     </PageTemplate>

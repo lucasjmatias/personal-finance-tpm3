@@ -1,7 +1,7 @@
 import { compose, descend, map, prop, sortWith, uniq } from 'ramda';
 import {
-  fetchAllExpenses,
-  fetchExpensesFromMonth,
+  apiFetchAllExpenses,
+  apiFetchExpensesFromMonth,
 } from '../integration/ExpensesApi';
 import MonthYear from '../integration/entities/MonthYear';
 import { expenseToMonthYear } from '../integration/converters/MonthYearConverters';
@@ -18,13 +18,13 @@ export async function getAvailableMonths(): Promise<MonthYear[]> {
     uniq,
     map(expenseToMonthYear)
   );
-  const expenses = await fetchAllExpenses();
+  const expenses = await apiFetchAllExpenses();
   return uniqueMonthsFromExpenses(expenses);
 }
 
 export async function getExpensesFromMonth(
   monthYear: MonthYear
 ): Promise<Expense[]> {
-  const expenses = await fetchExpensesFromMonth(monthYear);
+  const expenses = await apiFetchExpensesFromMonth(monthYear);
   return expenses;
 }

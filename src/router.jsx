@@ -1,15 +1,22 @@
-import { createBrowserRouter } from 'react-router-dom';
-import WelcomePage from './Pages/WelcomePage';
-import ExpensesPage from './Pages/ExpensesPage';
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <WelcomePage />,
-  },
-  {
-    path: '/expenses/:currentYearMonth?',
-    element: <ExpensesPage />,
-  },
-]);
+import { Route, Routes } from 'react-router-dom';
+import WelcomePage from './pages/WelcomePage';
+import ExpensesPage from './pages/ExpensesPage';
+import LoginPage from './pages/LoginPage';
+import RequireAuth from './components/RequiredAuth';
 
-export default router;
+export default function Router() {
+  return (
+    <Routes>
+      <Route path="/" element={<WelcomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/expenses/:currentYearMonth?"
+        element={
+          <RequireAuth>
+            <ExpensesPage />
+          </RequireAuth>
+        }
+      />
+    </Routes>
+  );
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import {
   getAvailableMonths,
   getExpensesFromMonth,
@@ -14,13 +14,20 @@ import { summarizeExpenses } from '../services/ExpensesService';
 export const useExpenses = (currentYearMonth: string | undefined) => {
   const [monthExpenses, setMonthExpenses] = useState<Expense[]>([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
-  const groupByCategory = compose(
-    sortBy<[string, number]>(prop(0)),
-    toPairs,
-    reduce(summarizeExpenses, {})
+  const groupByCategory = useMemo(
+    () =>
+      compose(
+        sortBy<[string, number]>(prop(0)),
+        toPairs,
+        reduce(summarizeExpenses, {})
+      ),
+    []
   );
 
-  const expensesByCategory = groupByCategory(monthExpenses);
+  const expensesByCategory = useMemo(
+    () => groupByCategory(monthExpenses),
+    [groupByCategory, monthExpenses]
+  );
 
   useEffect(() => {
     (async () => {

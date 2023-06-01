@@ -33,6 +33,7 @@ export const summarizeExpenses = (
   acc: { [key: string]: number },
   expense: Expense
 ) => {
+  console.log('calculo');
   const categoryValue: number = acc[expense.categoria] || 0;
   return { ...acc, [expense.categoria]: categoryValue + (expense.valor || 0) };
 };

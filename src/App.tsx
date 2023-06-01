@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import User from './integration/entities/User';
 import { authContext, anonymousUser } from './context/authContext';
 import Router from './router';
@@ -7,7 +7,7 @@ import { getCurrentUser, logout } from './services/AuthService';
 export default function App() {
   const [user, setUser] = useState<User>(anonymousUser);
 
-  function onSignOut() {
+  const onSignOut = useCallback(() => {
     (async () => {
       try {
         const currentUser = await logout();
@@ -17,17 +17,19 @@ export default function App() {
         setUser(anonymousUser);
       }
     })();
-  }
+  }, []);
 
-  function onSignIn(user: User) {
+  const onSignIn = useCallback((user: User) => {
     setUser(user);
-  }
+  }, []);
 
   useEffect(() => {
     (async () => {
       try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
+        if (user === anonymousUser) {
+          const currentUser = await getCurrentUser();
+          setUser(currentUser);
+        }
       } catch (error) {
         setUser(anonymousUser);
       }

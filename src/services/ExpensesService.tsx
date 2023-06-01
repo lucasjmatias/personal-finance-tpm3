@@ -28,3 +28,11 @@ export async function getExpensesFromMonth(
   const expenses = await apiFetchExpensesFromMonth(monthYear);
   return expenses;
 }
+
+export const summarizeExpenses = (
+  acc: { [key: string]: number },
+  expense: Expense
+) => {
+  const categoryValue: number = acc[expense.categoria] || 0;
+  return { ...acc, [expense.categoria]: categoryValue + (expense.valor || 0) };
+};

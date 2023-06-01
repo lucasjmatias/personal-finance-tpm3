@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -13,14 +14,17 @@ interface Props {
   onChange?: (value: string) => void;
 }
 
-export default function MonthYearSelect({
+export default React.memo(function MonthYearSelect({
   monthYears,
   value = '',
   onChange = identity,
 }: Props) {
-  const handleChange = (event: SelectChangeEvent) => {
-    onChange(event.target.value);
-  };
+  const handleChange = useCallback(
+    (event: SelectChangeEvent) => {
+      onChange(event.target.value);
+    },
+    [onChange]
+  );
 
   return (
     <div>
@@ -50,4 +54,4 @@ export default function MonthYearSelect({
       </FormControl>
     </div>
   );
-}
+});

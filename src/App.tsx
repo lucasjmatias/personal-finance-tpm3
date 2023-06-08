@@ -34,7 +34,7 @@ export default function App() {
         setUser(anonymousUser);
       }
     })();
-  }, []);
+  }, [user]);
 
   return (
     <authContext.Provider value={{ user, onSignOut, onSignIn }}>
